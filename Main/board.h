@@ -6,8 +6,8 @@
 //-------------------------------------
 
 //  PORTB
-#define dirb (0<<PB7)+(0<<PB6)+(0<<PB5)+(0<<PB4)+(0<<PB3)+(0<<PB2)+(0<<PB1)+(0<<PB0) // 1-out, 0-in
-#define opb  (0<<PB7)+(0<<PB6)+(0<<PB5)+(0<<PB4)+(0<<PB3)+(0<<PB2)+(0<<PB1)+(0<<PB0) // 1-pull up on, 0-Z
+#define dirb (0<<PB7)+(0<<PB6)+(0<<PB5)+(0<<PB4)+(0<<PB3)+(1<<PB2)+(0<<PB1)+(1<<PB0) // 1-out, 0-in
+#define opb  (0<<PB7)+(0<<PB6)+(0<<PB5)+(0<<PB4)+(0<<PB3)+(1<<PB2)+(0<<PB1)+(0<<PB0) // 1-pull up on, 0-Z
 #define PB_LED3   PB0  // O:
 #define PB_LED2   PB1  // O:
 #define PB_LED1   PB2  // O:
@@ -29,8 +29,8 @@
 #define PC_RESET    PC6       // I: RESET
 
 // PORTD
-#define dird (0<<PD7)+(0<<PD6)+(0<<PD5)+(0<<PD4)+(0<<PD3)+(0<<PD2)+(0<<PD1)+(0<<PD0) // 1-out, 0-in
-#define opd  (0<<PD7)+(0<<PD6)+(0<<PD5)+(0<<PD4)+(0<<PD3)+(0<<PD2)+(0<<PD1)+(0<<PD0) // 1-pull up on, 0-Z
+#define dird (1<<PD7)+(0<<PD6)+(0<<PD5)+(1<<PD4)+(1<<PD3)+(0<<PD2)+(0<<PD1)+(0<<PD0) // 1-out, 0-in
+#define opd  (1<<PD7)+(0<<PD6)+(0<<PD5)+(0<<PD4)+(1<<PD3)+(0<<PD2)+(0<<PD1)+(0<<PD0) // 1-pull up on, 0-Z
 #define PD_KEYB     PD0       // I: Вход последовательного порта
 #define PD_TXD      PD1       // O: Выход последовательного порта
 #define PD_LCD_ON   PD2       // O: Rs-485-TX Enable
