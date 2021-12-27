@@ -1,0 +1,25 @@
+
+avreal/WIN32  -  AVR controllers programmer by Redchuk Alexandr
+v1.28r5 (Oct 11 2010 20:02:13)  http://real.kiev.ua/avreal
+bug-reports, suggestions and so on mail to avreal@real.kiev.ua
+Command:
+  +mega48 -aft2232 "-pd=Dual RS232 A"
+Device connected, mega48|mega48A detected
+Chip locked - reading and programming disabled
+Fuses 
+  OSCCAL 	= A6
+_LOW = 0xF7
+  CKDIV     	= 1
+  CKOUT     	= 1
+  SUT       	= 3
+  CKSEL     	= 7
+_HIGH = 0xCC
+  RSTDISBL  	= 1
+  DWEN      	= 1
+  WDTON     	= 0
+  EESAVE    	= 1
+  BODLEVEL  	= 4
+_EXT = 0xFF
+  SELFPRGEN 	= 1
+Total time 0.30s
+Reset pin released

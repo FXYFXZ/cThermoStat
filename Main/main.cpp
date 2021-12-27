@@ -25,9 +25,8 @@ bool theButtonIsPressed = false;
 bool theButtonPressed = false;
 __eeprom TEEVars eevars = {
     0,
-    30
+    30 // задатчик температуры
 };
-
 
 
 int main() {
@@ -40,6 +39,7 @@ int main() {
             gl10ms = false;
             ButtonProc();
             if (--cnt50ms==0){  // 50 ms
+                __watchdog_reset();
                 cnt50ms = 5;
                 Proc50ms();
 
@@ -66,8 +66,6 @@ void Proc50ms(){
 
 void Proc1Sec(){
     MeasureTemperatureProc();
-
-
 
     // Indication
     if (!J1) {
@@ -221,9 +219,11 @@ void Port_Setup (void){
 void LowLevelInit(){
     __disable_interrupt();
     ACSR = (1<<ACD);   // Выключение аналогового компаратора
-//  _WDR();
-//  WDTCSR |= (1<<WDCE)|(1<<WDE);
-//  WDTCSR =  (1<<WDE)|(1<<WDP2)|(1<<WDP0); // 0.5 s
+
+    _WDR();
+    WDTCSR |= (1<<WDCE)|(1<<WDE);
+    WDTCSR =  (1<<WDE)|(1<<WDP2)|(1<<WDP0); // 0.5 s
+
     Port_Setup();
 
     EEAR = 0x00; // Установка регистра адреса EEPROM на нулевую ячейку
