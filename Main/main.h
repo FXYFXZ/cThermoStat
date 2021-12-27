@@ -8,6 +8,11 @@
 
 
 
+typedef struct {
+    U8 empty;
+    U8 value; // Заданная температура
+
+} TEEVars;
 
 
 #endif

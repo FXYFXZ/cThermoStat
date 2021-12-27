@@ -22,8 +22,8 @@
 
 //  PORTC
 #define dirc (0<<PC6)+(0<<PC5)+(0<<PC4)+(0<<PC3)+(0<<PC2)+(0<<PC1)+(0<<PC0) // 1-out, 0-in
-#define opc  (0<<PC6)+(1<<PC5)+(1<<PC4)+(1<<PC3)+(1<<PC2)+(1<<PC1)+(0<<PC0) // 1-pull up on, 0-Z
-#define PC_0        PC0       // O:
+#define opc  (0<<PC6)+(1<<PC5)+(1<<PC4)+(1<<PC3)+(1<<PC2)+(1<<PC1)+(1<<PC0) // 1-pull up on, 0-Z
+#define PC_BUTTON   PC0       // O:
 #define PC_J1       PC1       // O:
 #define PC_J2       PC2       // O:
 #define PC_J3       PC3       // O:
@@ -43,3 +43,11 @@
 #define PD_LEDG1    PD6       // O:
 #define PD_LEDR3    PD7       // X:
 
+// Включение, выключение нагрева
+#define HEAT_ON  BIT_SET(PORTB, PB_LEDY1)
+#define HEAT_OFF BIT_CLR(PORTB, PB_LEDY1)
+
+#define J1 (BIT_TEST(PINC, PC_J1)==0)
+#define J2 (BIT_TEST(PINC, PC_J2)==0)
+
+#define BUTTON_PRESSED (BIT_TEST(PINC, PC_BUTTON)==0)

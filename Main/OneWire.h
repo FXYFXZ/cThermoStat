@@ -23,9 +23,9 @@ Mail to PROTTOSS@mail.ru
 *****************************************************************************/
 
 
-void OW_SendByte(char data); // посылка байта в линию
-bool OW_DetectPresence(void);// сброс и определение устройства на шине
-char OW_ReceiveByte(void); // прием байта с линии
+//void OW_SendByte(char data); // посылка байта в линию
+//bool OW_DetectPresence(void);// сброс и определение устройства на шине
+//char OW_ReceiveByte(void); // прием байта с линии
 
 /*****************************************************************************
 определения для термостата DS1821
@@ -45,5 +45,20 @@ char OW_ReceiveByte(void); // прием байта с линии
 #define OW_1821_READ_STATUS         0xAC// чтение конфигурации из регистра конфигурации
 #define OW_1821_START_CONVERT_T     0xEE// инициализация измерения температуры
 #define OW_1821_STOP_CONVERT_T      0x22// пристановка измерения температуры
+
+
+// export 
+#ifdef __cplusplus 
+extern "C" {
+#endif 
+
+bool OW_DetectPresence(void);// сброс и определение устройства на шине
+char OW_ReceiveByte(void); // прием байта с линии
+void OW_SendByte(char data);
+
+#ifdef __cplusplus 
+}
+#endif 
+
 
 #endif//__ONEWIRE_H_
