@@ -970,6 +970,9 @@
     <file>
       <name>$PROJ_DIR$\Main\main.cpp</name>
     </file>
+    <file>
+      <name>$PROJ_DIR$\Main\OneWire.c</name>
+    </file>
   </group>
 </project>
 

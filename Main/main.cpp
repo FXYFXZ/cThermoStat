@@ -1,4 +1,10 @@
 #include "main.h"
+//#include "OneWire.h"
+
+extern "C" {
+    bool OW_DetectPresence(void);// сброс и определение устройства на шине
+    char OW_ReceiveByte(void); // прием байта с линии
+}
 
 
 /* Protos */
@@ -42,7 +48,20 @@ void Proc50ms(){
 
 
 void SecondProc(){
-    BIT_XOR(PORTD, PD_LEDR5);
+
+    if (OW_DetectPresence()) {
+        BIT_SET(PORTD, PD_LEDR5);
+    }
+    else {
+        BIT_CLR(PORTD, PD_LEDR5);
+    }
+
+
+
+
+
+
+
 }
 
 

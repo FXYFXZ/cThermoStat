@@ -5,6 +5,9 @@
 //PINS DEFINITIONS  Порты ввода/вывода
 //-------------------------------------
 
+#define BOARD_MCK 10000000
+
+
 //  PORTB
 #define dirb (0<<PB7)+(0<<PB6)+(0<<PB5)+(1<<PB4)+(0<<PB3)+(1<<PB2)+(1<<PB1)+(1<<PB0) // 1-out, 0-in
 #define opb  (0<<PB7)+(0<<PB6)+(0<<PB5)+(0<<PB4)+(0<<PB3)+(0<<PB2)+(0<<PB1)+(0<<PB0) // 1-pull up on, 0-Z
@@ -30,7 +33,7 @@
 
 // PORTD
 #define dird (1<<PD7)+(1<<PD6)+(0<<PD5)+(1<<PD4)+(1<<PD3)+(1<<PD2)+(0<<PD1)+(0<<PD0) // 1-out, 0-in
-#define opd  (0<<PD7)+(0<<PD6)+(1<<PD5)+(0<<PD4)+(0<<PD3)+(0<<PD2)+(0<<PD1)+(0<<PD0) // 1-pull up on, 0-Z
+#define opd  (0<<PD7)+(0<<PD6)+(0<<PD5)+(0<<PD4)+(0<<PD3)+(0<<PD2)+(0<<PD1)+(0<<PD0) // 1-pull up on, 0-Z
 #define PD_0        PD0       // I:
 #define PD_1        PD1       // O:
 #define PD_LEDR1    PD2       // O:
