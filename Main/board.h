@@ -9,7 +9,7 @@
 
 
 //  PORTB
-#define dirb (0<<PB7)+(0<<PB6)+(0<<PB5)+(1<<PB4)+(0<<PB3)+(1<<PB2)+(1<<PB1)+(1<<PB0) // 1-out, 0-in
+#define dirb (0<<PB7)+(0<<PB6)+(0<<PB5)+(1<<PB4)+(1<<PB3)+(1<<PB2)+(1<<PB1)+(1<<PB0) // 1-out, 0-in
 #define opb  (0<<PB7)+(0<<PB6)+(0<<PB5)+(0<<PB4)+(0<<PB3)+(0<<PB2)+(0<<PB1)+(0<<PB0) // 1-pull up on, 0-Z
 #define PB_LEDG2  PB0  // O: LED Green 2
 #define PB_485TXE PB1  // O:
@@ -32,7 +32,7 @@
 #define PC_RESET    PC6       // I: RESET
 
 // PORTD
-#define dird (1<<PD7)+(1<<PD6)+(0<<PD5)+(1<<PD4)+(1<<PD3)+(1<<PD2)+(0<<PD1)+(0<<PD0) // 1-out, 0-in
+#define dird (1<<PD7)+(1<<PD6)+(0<<PD5)+(1<<PD4)+(1<<PD3)+(1<<PD2)+(0<<PD1)+(1<<PD0) // 1-out, 0-in
 #define opd  (0<<PD7)+(0<<PD6)+(0<<PD5)+(0<<PD4)+(0<<PD3)+(0<<PD2)+(0<<PD1)+(0<<PD0) // 1-pull up on, 0-Z
 #define PD_0        PD0       // I:
 #define PD_1        PD1       // O:
@@ -44,8 +44,8 @@
 #define PD_LEDR3    PD7       // X:
 
 // Включение, выключение нагрева
-#define HEAT_ON  BIT_SET(PORTB, PB_LEDY1)
-#define HEAT_OFF BIT_CLR(PORTB, PB_LEDY1)
+#define HEAT_ON  BIT_SET(PORTB, PB_BUZZ)
+#define HEAT_OFF BIT_CLR(PORTB, PB_BUZZ)
 
 #define J1 (BIT_TEST(PINC, PC_J1)==0)
 #define J2 (BIT_TEST(PINC, PC_J2)==0)

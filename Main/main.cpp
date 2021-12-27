@@ -25,7 +25,7 @@ bool theButtonIsPressed = false;
 bool theButtonPressed = false;
 __eeprom TEEVars eevars = {
     0,
-    30 // задатчик температуры
+    28 // задатчик температуры
 };
 
 
@@ -33,7 +33,8 @@ int main() {
   static U8 cnt50ms = 5;
   static U8 cntSec = 20;
   LowLevelInit();
-    // Main Loop
+
+  // Main Loop
     while(true) {
         if (gl10ms){ // 10 ms
             gl10ms = false;
@@ -51,6 +52,8 @@ int main() {
                  }
             }
         }
+        __sleep();
+
     }
 }
 
@@ -61,12 +64,14 @@ void Proc50ms(){
         if (J1) {
             if (++eevars.value > MAX_TEMPERATURE) eevars.value = MIN_TEMPERATURE;
         }
+        else {
+            BIT_XOR(PORTB, PB_LEDY1); // включаем выключаем подсветку
+        }
     }
 }
 
 void Proc1Sec(){
     MeasureTemperatureProc();
-
     // Indication
     if (!J1) {
         if (theTempIsValid) {
@@ -79,7 +84,6 @@ void Proc1Sec(){
     else {
         ShowNumber(eevars.value);
     }
-
     ThermoTatcicProc();
 
 }
@@ -93,9 +97,11 @@ void ThermoTatcicProc(void){
 
     if (theTemperature >= eevars.value) {
         HEAT_OFF;
+        BIT_CLR(PORTB, PB_LEDG2);
     }
     else {
         HEAT_ON;
+        BIT_SET(PORTB, PB_LEDG2);
     }
 
 }
@@ -126,7 +132,7 @@ void MeasureTemperatureProc(void){
 
 
 void ButtonProc(){
-    const U8 JITT_VALUE = 10; 
+    const U8 JITT_VALUE = 10;
     static U8 jitterIn; // на нажатие
     static U8 jitterOut; // на отпускание
 
@@ -233,7 +239,6 @@ void LowLevelInit(){
     TCCR1B = (1<<CS12)+(0<<CS11)+(1<<CS10);  //
     TCNT1 = TIMER_VALUE;                     //
     TIMSK1 |= (1<<TOIE1);
-
 
     __enable_interrupt();
 }
