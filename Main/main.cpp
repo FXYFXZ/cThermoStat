@@ -1,5 +1,6 @@
 #include "main.h"
 #include "OneWire.h"
+#include "LCD.h"
 
 /* Protos */
 void LowLevelInit();
@@ -21,6 +22,7 @@ bool gl10ms = false;
 bool theTempIsValid = false;
 U8 theTemperature = 0;
 bool theButtonIsPressed = false;
+LCD lcd;
 
 bool theButtonPressed = false;
 __eeprom TEEVars eevars = {
@@ -44,6 +46,7 @@ int main() {
                 cnt50ms = 5;
                 Proc50ms();
 
+
                  if (--cntSec==0){  // 1s
                     cntSec = 20;
                     MeasureTemperatureProc();
@@ -59,6 +62,8 @@ int main() {
 
 
 void Proc50ms(){
+    lcd.drawAllProc(); // перерисовка 
+
     if (theButtonIsPressed) {
         theButtonIsPressed = false;
         if (J1) {
