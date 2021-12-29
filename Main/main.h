@@ -11,8 +11,11 @@
 typedef struct {
     U8 empty;
     U8 value; // Заданная температура
-
 } TEEVars;
+
+
+// export main
+void UTIL_WaitTimeInUs(unsigned long mck, unsigned int time_us);
 
 
 #endif

@@ -6,7 +6,6 @@
 void LowLevelInit();
 void Proc1Sec();
 void Proc50ms();
-void ShowNumber(U8 myNum);
 void MeasureTemperatureProc();
 void ThermoTatcicProc();
 
@@ -35,7 +34,7 @@ int main() {
   static U8 cnt50ms = 5;
   static U8 cntSec = 20;
   LowLevelInit();
-
+  lcd.init();
   // Main Loop
     while(true) {
         if (gl10ms){ // 10 ms
@@ -45,7 +44,6 @@ int main() {
                 __watchdog_reset();
                 cnt50ms = 5;
                 Proc50ms();
-
 
                  if (--cntSec==0){  // 1s
                     cntSec = 20;
@@ -77,19 +75,25 @@ void Proc50ms(){
 
 void Proc1Sec(){
     MeasureTemperatureProc();
-    // Indication
-    if (!J1) {
-        if (theTempIsValid) {
-            ShowNumber(theTemperature);
-        }
-        else {
-            ShowNumber(0);
-        }
-    }
-    else {
-        ShowNumber(eevars.value);
-    }
     ThermoTatcicProc();
+
+    static U8 tempCnt = 0;
+    lcd.printHex(MLT_C1, tempCnt++);
+    lcd.printChar(MLT_C3, CHR_GRAD);
+    
+
+//  // Indication
+//  if (!J1) {
+//      if (theTempIsValid) {
+//          ShowNumber(theTemperature);
+//      }
+//      else {
+//          ShowNumber(0);
+//      }
+//  }
+//  else {
+//      ShowNumber(eevars.value);
+//  }
 
 }
 
@@ -167,55 +171,6 @@ void ButtonProc(){
     }
 }
 
-
-void ShowNumber(U8 myNum){
-
-    if (BIT_TEST(myNum,0)) {
-        BIT_SET(PORTD, PD_LEDR1);
-    }
-    else {
-        BIT_CLR(PORTD, PD_LEDR1);
-    }
-
-    if (BIT_TEST(myNum,1)) {
-        BIT_SET(PORTD, PD_LEDR2);
-    }
-    else {
-        BIT_CLR(PORTD, PD_LEDR2);
-    }
-
-    if (BIT_TEST(myNum,2)) {
-        BIT_SET(PORTD, PD_LEDR3);
-    }
-    else {
-        BIT_CLR(PORTD, PD_LEDR3);
-    }
-
-
-    if (BIT_TEST(myNum,3)) {
-        BIT_SET(PORTB, PB_LEDR4);
-    }
-    else {
-        BIT_CLR(PORTB, PB_LEDR4);
-    }
-
-    if (BIT_TEST(myNum,4)) {
-        BIT_SET(PORTD, PD_LEDR5);
-    }
-    else {
-        BIT_CLR(PORTD, PD_LEDR5);
-    }
-
-    if (BIT_TEST(myNum,5)) {
-        BIT_SET(PORTD, PD_LEDG1);
-    }
-    else {
-        BIT_CLR(PORTD, PD_LEDG1);
-    }
-}
-
-
-
 void Port_Setup (void){
     DDRB = dirb;
     PORTB = opb;
@@ -255,5 +210,7 @@ __interrupt void TIMER1_OVF_interrupt(void) {
     TCNT1 = TIMER_VALUE; // load for next interval
     gl10ms = true;
 }
+
+
 
 

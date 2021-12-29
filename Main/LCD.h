@@ -9,7 +9,13 @@
 
 #define MLT_COL_NUM 10
 
-// Индикаторы 
+
+enum {
+    CHR_GRAD = 0x26, // градусы
+};
+
+
+// колонки 
 typedef enum {
     MLT_C1,
     MLT_C2,
@@ -28,14 +34,19 @@ typedef enum {
 class LCD {
 public:
     LCD(); // Constructor
+    U8 arr[MLT_COL_NUM]; // screen memory
     void drawAllProc();
     void init();
 
-    void printHex (U8 myVal, TMLT_Cols myCol);
-    void printDec (U8 myVal, TMLT_Cols myCol);
-    void printChar(U8 myVal, TMLT_Cols myCol);
+    void printHex (TMLT_Cols myCol, U8 myVal);
+    void printDec (TMLT_Cols myCol, U8 myVal);
+    void printNibble (TMLT_Cols myCol, U8 myVal);
+    void printChar(TMLT_Cols myCol, U8 myVal);
+
 private:
-    U8 arr[MLT_COL_NUM]; // screen memory
+    void setAddr(U8);
+    void putData(U8);
+    void putNibble(U8);
     bool _redraw;
 };
 
@@ -43,7 +54,6 @@ private:
 inline LCD::LCD() {
     memset(arr, 0, MLT_COL_NUM);
     _redraw = true;
-
 }
 
 
