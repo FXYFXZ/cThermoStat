@@ -64,36 +64,35 @@ void Proc50ms(){
 
     if (theButtonIsPressed) {
         theButtonIsPressed = false;
-        if (J1) {
-            if (++eevars.value > MAX_TEMPERATURE) eevars.value = MIN_TEMPERATURE;
-        }
-        else {
-            BIT_XOR(PORTB, PB_LEDY1); // включаем выключаем подсветку
-        }
+        if (++eevars.tZad > MAX_TEMPERATURE) eevars.tZad = MIN_TEMPERATURE;
     }
 }
 
 void Proc1Sec(){
+    static bool secTgl = false;
+
     MeasureTemperatureProc();
     ThermoTatcicProc();
 
-    static U8 tempCnt = 0;
-    lcd.printHex(MLT_C1, tempCnt++);
+    lcd.printDec(MLT_C1, eevars.tZad);
     lcd.printChar(MLT_C3, CHR_GRAD);
-    
+   
 
-//  // Indication
-//  if (!J1) {
-//      if (theTempIsValid) {
-//          ShowNumber(theTemperature);
-//      }
-//      else {
-//          ShowNumber(0);
-//      }
-//  }
-//  else {
-//      ShowNumber(eevars.value);
-//  }
+    lcd.printDec(MLT_C5, theTemperature);
+    lcd.printChar(MLT_C7, CHR_GRAD); 
+    if (secTgl) {
+        lcd.arr[MLT_C7] |= 0x10; // точка
+    }
+    secTgl = !secTgl; 
+
+
+    if (BIT_TEST(PORTB, PB_BUZZ)) {
+        lcd.arr[MLT_C9] = CHR_PG_HEAT_ON1 | CHR_PG_HEAT_ON2 | CHR_PG_HEAT_ON3; 
+    }
+    else {
+        lcd.arr[MLT_C9] = 0;
+    }
+    lcd.arr[MLT_C10] = lcd.arr[MLT_C9];
 
 }
 
@@ -104,7 +103,7 @@ void ThermoTatcicProc(void){
         return;
     }
 
-    if (theTemperature >= eevars.value) {
+    if (theTemperature >= eevars.tZad) {
         HEAT_OFF;
         BIT_CLR(PORTB, PB_LEDG2);
     }

@@ -11,7 +11,11 @@
 
 
 enum {
-    CHR_GRAD = 0x26, // градусы
+    CHR_GRAD = '&', // градусы
+    CHR_PG_POINT = 0x10,
+    CHR_PG_HEAT_ON1 = 0x04,
+    CHR_PG_HEAT_ON2 = 0x01,
+    CHR_PG_HEAT_ON3 = 0x08,
 };
 
 
