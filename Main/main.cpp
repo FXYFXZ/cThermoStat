@@ -9,18 +9,21 @@ void Proc50ms();
 void MeasureTemperatureProc();
 void ThermoTatcicProc();
 
-void ButtonProc(); // опрос кнопки
+void Button1Proc(); // опрос кнопки
+void Button2Proc(); // опрос кнопки
 
 
 /* Locals */
 const U8 MAX_TEMPERATURE = 0x2F;
 const U8 MIN_TEMPERATURE = 20;
+
 bool gl10ms = false;
 #define TIMER_VALUE 0xFFFF-97
 
 bool theTempIsValid = false;
 U8 theTemperature = 0;
-bool theButtonIsPressed = false;
+bool theButton1IsPressed = false;
+bool theButton2IsPressed = false;
 LCD lcd;
 
 bool theButtonPressed = false;
@@ -39,7 +42,8 @@ int main() {
     while(true) {
         if (gl10ms){ // 10 ms
             gl10ms = false;
-            ButtonProc();
+            Button1Proc();
+            Button2Proc();
             if (--cnt50ms==0){  // 50 ms
                 __watchdog_reset();
                 cnt50ms = 5;
@@ -60,12 +64,20 @@ int main() {
 
 
 void Proc50ms(){
-    lcd.drawAllProc(); // перерисовка 
+    lcd.drawAllProc(); // перерисовка
 
-    if (theButtonIsPressed) {
-        theButtonIsPressed = false;
-        if (++eevars.tZad > MAX_TEMPERATURE) eevars.tZad = MIN_TEMPERATURE;
+    if (theButton1IsPressed) {
+        theButton1IsPressed = false;
+        if (++eevars.tZad > MAX_TEMPERATURE) eevars.tZad = MAX_TEMPERATURE;
     }
+
+    if (theButton2IsPressed) {
+        theButton2IsPressed = false;
+        if (--eevars.tZad < MIN_TEMPERATURE) eevars.tZad = MIN_TEMPERATURE;
+    }
+
+
+
 }
 
 void Proc1Sec(){
@@ -76,18 +88,18 @@ void Proc1Sec(){
 
     lcd.printDec(MLT_C1, eevars.tZad);
     lcd.printChar(MLT_C3, CHR_GRAD);
-   
+
 
     lcd.printDec(MLT_C5, theTemperature);
-    lcd.printChar(MLT_C7, CHR_GRAD); 
+    lcd.printChar(MLT_C7, CHR_GRAD);
     if (secTgl) {
         lcd.arr[MLT_C7] |= 0x10; // точка
     }
-    secTgl = !secTgl; 
+    secTgl = !secTgl;
 
 
     if (BIT_TEST(PORTB, PB_BUZZ)) {
-        lcd.arr[MLT_C9] = CHR_PG_HEAT_ON1 | CHR_PG_HEAT_ON2 | CHR_PG_HEAT_ON3; 
+        lcd.arr[MLT_C9] = CHR_PG_HEAT_ON1 | CHR_PG_HEAT_ON2 | CHR_PG_HEAT_ON3;
     }
     else {
         lcd.arr[MLT_C9] = 0;
@@ -139,14 +151,16 @@ void MeasureTemperatureProc(void){
 }
 
 
-void ButtonProc(){
+// одна кнопка на J1 другая на J2
+
+void Button1Proc(){
     const U8 JITT_VALUE = 10;
     static U8 jitterIn; // на нажатие
     static U8 jitterOut; // на отпускание
 
-    if (!theButtonIsPressed) {
+    if (!theButton1IsPressed) {
         if (jitterOut) {
-            if (!BUTTON_PRESSED) {
+            if (!J1) {
                 if (--jitterOut==0) {
                     jitterIn = 0;
                 }
@@ -156,11 +170,11 @@ void ButtonProc(){
             }
         }
         else{
-            if (BUTTON_PRESSED) {
+            if (J1) {
                 if (++jitterIn >= JITT_VALUE) {
                     jitterIn = JITT_VALUE;
                     jitterOut =JITT_VALUE;
-                    theButtonIsPressed = true;
+                    theButton1IsPressed = true;
                 }
             }
             else {
@@ -169,6 +183,40 @@ void ButtonProc(){
         }
     }
 }
+
+void Button2Proc(){
+    const U8 JITT_VALUE = 10;
+    static U8 jitterIn; // на нажатие
+    static U8 jitterOut; // на отпускание
+
+    if (!theButton2IsPressed) {
+        if (jitterOut) {
+            if (!J2) {
+                if (--jitterOut==0) {
+                    jitterIn = 0;
+                }
+            }
+            else{
+                jitterOut =JITT_VALUE;
+            }
+        }
+        else{
+            if (J2) {
+                if (++jitterIn >= JITT_VALUE) {
+                    jitterIn = JITT_VALUE;
+                    jitterOut =JITT_VALUE;
+                    theButton2IsPressed = true;
+                }
+            }
+            else {
+                jitterIn = 0;
+            }
+        }
+    }
+}
+
+
+
 
 void Port_Setup (void){
     DDRB = dirb;
