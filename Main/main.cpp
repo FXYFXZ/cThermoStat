@@ -74,9 +74,9 @@ void ShowVersion(void){
     lcd.printDec(MLT_C2, CODE_VERSION_NUM);
     lcd.drawAllProc();
     // Delay
-    U8 secDelay = 2 /0.01;
-    while(true){
-        if (secDelay){ // 10 ms
+    U8 secDelay = 1 /0.01;
+    while(secDelay){
+        if (gl10ms){ // 10 ms
             gl10ms = false;
             __watchdog_reset();
             secDelay--;
@@ -97,9 +97,8 @@ void Proc50ms(){
     if (theButton2IsPressed) {
         theButton2IsPressed = false;
         if (--thermoSet < MIN_TEMPERATURE) thermoSet = MIN_TEMPERATURE;
+        ee_write_char((int)&eevars.tZad, thermoSet); // store
     }
-
-
 
 }
 
