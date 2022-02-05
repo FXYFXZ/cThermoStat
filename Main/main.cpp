@@ -8,17 +8,19 @@ void Proc1Sec();
 void Proc50ms();
 void MeasureTemperatureProc();
 void ThermoTatcicProc();
-
+void ShowVersion(void);
 void Button1Proc(); // опрос кнопки
 void Button2Proc(); // опрос кнопки
-
+void ee_write_char(int ee_addr, unsigned char ee_data);
+unsigned char ee_read_char(int ee_addr);
 
 /* Locals */
 const U8 MAX_TEMPERATURE = 0x2F;
 const U8 MIN_TEMPERATURE = 20;
 
 bool gl10ms = false;
-#define TIMER_VALUE 0xFFFF-97
+
+#define TIMER_VALUE 0xFFFF-97  // константа таймера для отсчета интервалов
 
 bool theTempIsValid = false;
 U8 theTemperature = 0;
@@ -26,18 +28,22 @@ bool theButton1IsPressed = false;
 bool theButton2IsPressed = false;
 LCD lcd;
 
+
 bool theButtonPressed = false;
 __eeprom TEEVars eevars = {
-    0,
     28 // задатчик температуры
 };
 
+
+TThermo thermoSet = 28;
 
 int main() {
   static U8 cnt50ms = 5;
   static U8 cntSec = 20;
   LowLevelInit();
   lcd.init();
+  thermoSet = ee_read_char((int)&eevars.tZad);
+  ShowVersion();
   // Main Loop
     while(true) {
         if (gl10ms){ // 10 ms
@@ -62,18 +68,35 @@ int main() {
     }
 }
 
+// Приветствие (показываем номер версии)
+void ShowVersion(void){
+    lcd.Clear();
+    lcd.printDec(MLT_C2, CODE_VERSION_NUM);
+    lcd.drawAllProc();
+    // Delay
+    U8 secDelay = 2 /0.01;
+    while(true){
+        if (secDelay){ // 10 ms
+            gl10ms = false;
+            __watchdog_reset();
+            secDelay--;
+        }
+    }
+}
+
 
 void Proc50ms(){
     lcd.drawAllProc(); // перерисовка
 
     if (theButton1IsPressed) {
         theButton1IsPressed = false;
-        if (++eevars.tZad > MAX_TEMPERATURE) eevars.tZad = MAX_TEMPERATURE;
+        if (++thermoSet > MAX_TEMPERATURE) thermoSet = MAX_TEMPERATURE;
+        ee_write_char((int)&eevars.tZad, thermoSet); // store
     }
 
     if (theButton2IsPressed) {
         theButton2IsPressed = false;
-        if (--eevars.tZad < MIN_TEMPERATURE) eevars.tZad = MIN_TEMPERATURE;
+        if (--thermoSet < MIN_TEMPERATURE) thermoSet = MIN_TEMPERATURE;
     }
 
 
@@ -86,7 +109,7 @@ void Proc1Sec(){
     MeasureTemperatureProc();
     ThermoTatcicProc();
 
-    lcd.printDec(MLT_C1, eevars.tZad);
+    lcd.printDec(MLT_C1, thermoSet);
     lcd.printChar(MLT_C3, CHR_GRAD);
 
 
@@ -115,7 +138,7 @@ void ThermoTatcicProc(void){
         return;
     }
 
-    if (theTemperature >= eevars.tZad) {
+    if (theTemperature >= thermoSet) {
         HEAT_OFF;
         BIT_CLR(PORTB, PB_LEDG2);
     }
@@ -260,4 +283,28 @@ __interrupt void TIMER1_OVF_interrupt(void) {
 
 
 
+
+/** \brief запись байта в EEPROM
+    \param ee_addr - адрес памяти
+    \param ee_data - данные  */
+#pragma optimize = s 0        //  На всякий случай отключаем оптимизацию
+void ee_write_char(int ee_addr, unsigned char ee_data){
+      while (EECR & (1<<EEPE));
+      __disable_interrupt();
+      EEAR=ee_addr;
+      EEDR=ee_data;
+      EECR  |= (1<<EEMPE);
+      EECR  |= (1<<EEPE);
+      EEAR=0;
+      __enable_interrupt();
+      return;
+}
+
+
+unsigned char ee_read_char(int ee_addr) {
+      while (EECR & (1<<EEPE));
+      EEAR=ee_addr;
+      EECR  |= (1<<EERE);
+      return EEDR;
+}
 

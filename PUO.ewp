@@ -38,7 +38,7 @@
         </option>
         <option>
           <name>GGEnableConfig</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>GG64KFlash</name>
@@ -747,11 +747,11 @@
         </option>
         <option>
           <name>XclOverride</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>XclFile</name>
-          <state>$TOOLKIT_DIR$\src\template\cfgm48.xcl</state>
+          <state>$PROJ_DIR$\lnkm48s.xcl</state>
         </option>
         <option>
           <name>XclFileSlave</name>
@@ -968,16 +968,14 @@
   <group>
     <name>Main</name>
     <file>
+      <name>$PROJ_DIR$\Main\LCD.cpp</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\Main\main.cpp</name>
     </file>
     <file>
       <name>$PROJ_DIR$\Main\OneWire.c</name>
     </file>
-    <file>
-      <name>$PROJ_DIR$\Main\LCD.cpp</name>
-    </file>
-
-
   </group>
 </project>
 

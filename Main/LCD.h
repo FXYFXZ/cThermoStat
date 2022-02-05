@@ -19,7 +19,7 @@ enum {
 };
 
 
-// колонки 
+// колонки
 typedef enum {
     MLT_C1,
     MLT_C2,
@@ -41,6 +41,7 @@ public:
     U8 arr[MLT_COL_NUM]; // screen memory
     void drawAllProc();
     void init();
+    void Clear();
 
     void printHex (TMLT_Cols myCol, U8 myVal);
     void printDec (TMLT_Cols myCol, U8 myVal);
@@ -56,11 +57,13 @@ private:
 
 // Constructor implementation
 inline LCD::LCD() {
+    Clear();
+}
+
+inline void LCD::Clear(){
     memset(arr, 0, MLT_COL_NUM);
     _redraw = true;
 }
-
-
 
 
 #endif // __LCD_H_INCL__
